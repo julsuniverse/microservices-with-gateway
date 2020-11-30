@@ -1,0 +1,99 @@
+version: '3'
+services:
+    auth-nginx:
+        build:
+            context: ./auth/docker
+            dockerfile: nginx.docker
+        volumes:
+            - ./auth:/app
+        depends_on:
+            - auth-php-fpm
+        ports:
+            - "8081:80"
+
+    auth-php-fpm:
+        build:
+            context: ./auth/docker
+            dockerfile: php-fpm.docker
+        volumes:
+            - ./auth:/app
+
+    auth-php-cli:
+        build:
+            context: ./auth/docker
+            dockerfile: php-cli.docker
+        volumes:
+            - ./auth:/app
+            - composer:/root/.composer/cache
+
+    data-nginx:
+        build:
+            context: ./data/docker
+            dockerfile: nginx.docker
+        volumes:
+            - ./data:/app
+        depends_on:
+            - data-php-fpm
+        ports:
+            - "8082:80"
+
+    data-php-fpm:
+        build:
+            context: ./data/docker
+            dockerfile: php-fpm.docker
+        volumes:
+            - ./data:/app
+        depends_on:
+            - data-mysql
+
+    data-php-cli:
+        build:
+            context: ./data/docker
+            dockerfile: php-cli.docker
+        volumes:
+            - ./data:/app
+            - composer:/root/.composer/cache
+        depends_on:
+            - data-mysql
+
+    data-mysql:
+        image: mysql:5.7
+        volumes:
+            - data-mysql-volume:/var/lib/mysql
+        environment:
+            - "MYSQL_ROOT_PASSWORD=secret"
+            - "MYSQL_USER=app"
+            - "MYSQL_PASSWORD=secret"
+            - "MYSQL_DATABASE=app"
+        ports:
+            - "33061:3306"
+
+    gateway-nginx:
+        build:
+            context: ./gateway/docker
+            dockerfile: nginx.docker
+        volumes:
+            - ./gateway:/app
+        depends_on:
+            - gateway-php-fpm
+        ports:
+            - "8080:80"
+
+    gateway-php-fpm:
+        build:
+            context: ./gateway/docker
+            dockerfile: php-fpm.docker
+        volumes:
+            - ./gateway:/app
+
+    gateway-php-cli:
+        build:
+            context: ./gateway/docker
+            dockerfile: php-cli.docker
+        volumes:
+            - ./gateway:/app
+            - composer:/root/.composer/cache
+
+volumes:
+    data-mysql-volume:
+    composer:
