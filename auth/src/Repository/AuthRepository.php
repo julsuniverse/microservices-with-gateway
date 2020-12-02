@@ -17,16 +17,21 @@ class AuthRepository
      * @var Client
      */
     private $client;
+    /**
+     * @var string
+     */
+    private $baseUrl;
 
-    public function __construct(Client $client)
+    public function __construct(Client $client, string $baseUrl)
     {
         $this->client = $client;
+        $this->baseUrl = $baseUrl;
     }
 
     public function findByEmail(string $email): AuthDTO
     {
         try {
-            $url = 'data-nginx/user/' . $email . '/find';
+            $url = $this->baseUrl . '/user/' . $email . '/find';
             $response = $this->client->request('GET', $url);
             if (in_array($response->getStatusCode(), [200, 201])) {
                 $response = json_decode((string)$response->getBody(), true);
@@ -51,7 +56,7 @@ class AuthRepository
     public function register(Command $command): array
     {
         try {
-            $url = 'data-nginx/register';
+            $url = $this->baseUrl . '/register';
             $response = $this->client->request('POST', $url, [
                 'json' => [
                     'email' => $command->email,

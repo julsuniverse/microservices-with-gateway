@@ -23,6 +23,10 @@ services:
 
     GuzzleHttp\Client: ~
 
+    App\Repository\AuthRepository:
+        arguments:
+            $baseUrl: '%env(BASE_DATA_MICROSERVICE_URL)%'
+
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     App\Controller\:

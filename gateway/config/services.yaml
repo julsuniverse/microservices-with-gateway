@@ -27,5 +27,11 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
+    GuzzleHttp\Client: ~
+
+    App\Repository\UserRepository:
+        arguments:
+            $baseUrl: '%env(BASE_DATA_MICROSERVICE_URL)%'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

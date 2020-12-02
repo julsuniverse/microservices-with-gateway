@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Model\User\Entity\User;
-use App\Model\User\Entity\UserRepository;
 use App\Model\User\UseCase\Create;
 use App\Model\User\UseCase\Update;
 use App\Model\User\UseCase\Delete;
