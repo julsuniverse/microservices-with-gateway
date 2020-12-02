@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Model\User\Entity\User;
+use App\Model\User\Entity\UserRepository;
 use App\Model\User\UseCase\Create;
 use App\Model\User\UseCase\Update;
 use App\Model\User\UseCase\Delete;
@@ -109,4 +110,18 @@ class UserController extends AbstractController
         return $this->json([], Response::HTTP_NO_CONTENT);
     }
 
+    /**
+     * @Route("/user/{email}/find", name="user.find", methods={"GET"})
+     * @param User $user
+     * @return JsonResponse
+     */
+    public function findByEmail(User $user): JsonResponse
+    {
+        return $this->json([
+            'id' => $user->getId()->getValue(),
+            'password_hash' => $user->getPasswordHash(),
+            'email' => $user->getEmail(),
+            'role' => $user->getRole()->getName()
+        ], Response::HTTP_OK);
+    }
 }

@@ -17,6 +17,8 @@ services:
             dockerfile: php-fpm.docker
         volumes:
             - ./auth:/app
+        depends_on:
+            - auth-mysql
 
     auth-php-cli:
         build:
@@ -25,6 +27,20 @@ services:
         volumes:
             - ./auth:/app
             - composer:/root/.composer/cache
+        depends_on:
+            - auth-mysql
+
+    auth-mysql:
+        image: mysql:5.7
+        volumes:
+            - auth-mysql-volume:/var/lib/mysql
+        environment:
+            - "MYSQL_ROOT_PASSWORD=secret"
+            - "MYSQL_USER=app"
+            - "MYSQL_PASSWORD=secret"
+            - "MYSQL_DATABASE=app"
+        ports:
+            - "33062:3306"
 
     data-nginx:
         build:
@@ -96,4 +112,5 @@ services:
 
 volumes:
     data-mysql-volume:
+    auth-mysql-volume:
     composer:

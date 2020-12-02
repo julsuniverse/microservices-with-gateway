@@ -98,4 +98,12 @@ class User
     {
         $this->role = $role;
     }
+
+    /**
+     * @return string
+     */
+    public function getPasswordHash(): string
+    {
+        return $this->passwordHash;
+    }
 }
