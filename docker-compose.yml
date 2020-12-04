@@ -8,8 +8,6 @@ services:
             - ./auth:/app
         depends_on:
             - auth-php-fpm
-        ports:
-            - "8081:80"
 
     auth-php-fpm:
         build:
@@ -27,6 +25,7 @@ services:
         volumes:
             - ./auth:/app
             - composer:/root/.composer/cache
+            - ./oauth:/app/var/oauth
         depends_on:
             - auth-mysql
 
@@ -50,8 +49,6 @@ services:
             - ./data:/app
         depends_on:
             - data-php-fpm
-        ports:
-            - "8082:80"
 
     data-php-fpm:
         build:
