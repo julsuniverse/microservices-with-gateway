@@ -11,6 +11,7 @@ use Doctrine\Common\Annotations\Reader;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -72,7 +73,7 @@ class RequestSubscriber implements EventSubscriberInterface
         $roles = $decoded->scopes ?? null;
 
         if (!$id || !$roles) {
-            throw new \RuntimeException('Access denied');
+            throw new \RuntimeException('Access denied', Response::HTTP_FORBIDDEN);
         }
 
         $this->checkRoles($allowAccess, $roles);
@@ -91,7 +92,7 @@ class RequestSubscriber implements EventSubscriberInterface
             }
         }
         if (!$allowed) {
-            throw new \RuntimeException('Access denied');
+            throw new \RuntimeException('Access denied', Response::HTTP_FORBIDDEN);
         }
     }
 }

@@ -32,7 +32,7 @@ class TokenDecoder
         } catch (ExpiredException $e) {
             throw new UnauthorizedHttpException('Token expired');
         } catch (\Throwable $e) {
-            throw new \RuntimeException('Access denied');
+            throw new \RuntimeException('Access denied', 403);
         }
 
         return $decoded;

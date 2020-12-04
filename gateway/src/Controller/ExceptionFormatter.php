@@ -57,5 +57,14 @@ class ExceptionFormatter implements EventSubscriberInterface
                 ]
             ], Response::HTTP_UNPROCESSABLE_ENTITY));
         }
+
+        if ($exception instanceof \Throwable) {
+            $event->setResponse(new JsonResponse([
+                'error' => [
+                    'code' => $exception->getCode(),
+                    'message' => $exception->getMessage(),
+                ]
+            ], $exception->getCode() ?: Response::HTTP_BAD_GATEWAY));
+        }
     }
 }
