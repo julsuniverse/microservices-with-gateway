@@ -53,6 +53,31 @@ class AuthRepository
         }
     }
 
+    public function findById(string $id): AuthDTO
+    {
+        try {
+            $url = $this->baseUrl . '/user/' . $id;
+            $response = $this->client->request('GET', $url);
+            if (in_array($response->getStatusCode(), [200, 201])) {
+                $response = json_decode((string)$response->getBody(), true);
+                return new AuthDTO(
+                    $response['id'],
+                    $response['email'],
+                    $response['password_hash'],
+                    $response['role']
+                );
+            }
+            throw new \DomainException('Something went wrong');
+        } catch (ConnectException $e) {
+            throw new \DomainException('Connection Exception');
+        } catch (GuzzleException $e) {
+            $response = json_decode((string)$e->getResponse()->getBody());
+            throw new \DomainException($response->title ?? $e->getMessage());
+        } catch (\Throwable $e) {
+            throw new \DomainException($e->getMessage());
+        }
+    }
+
     public function register(Command $command): array
     {
         try {

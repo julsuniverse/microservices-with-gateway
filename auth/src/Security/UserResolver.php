@@ -28,12 +28,13 @@ final class UserResolver implements EventSubscriberInterface
     {
         return [
             OAuth2Events::USER_RESOLVE => 'onUserResolve',
-            OAuth2Events::SCOPE_RESOLVE => 'onScopeResolve'
+            OAuth2Events::SCOPE_RESOLVE => 'onScopeResolve',
         ];
     }
 
     public function onUserResolve(UserResolveEvent $event): void
     {
+        //echo $event->getUsername(); die;
         try {
             $user = $this->userProvider->loadUserByUsername($event->getUsername());
         } catch (UsernameNotFoundException $e) {
@@ -55,7 +56,7 @@ final class UserResolver implements EventSubscriberInterface
     public function onScopeResolve(ScopeResolveEvent $event): void
     {
         try {
-            $user = $this->userProvider->loadUserByUsername($event->getUserIdentifier());
+            $user = $this->userProvider->loadUserById($event->getUserIdentifier());
         } catch (UsernameNotFoundException $e) {
             throw new \DomainException('User not found');
         }

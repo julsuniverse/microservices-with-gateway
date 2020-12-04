@@ -28,6 +28,10 @@ class Handler
     {
         $user = $this->userRepository->get($command->id->getValue());
 
+        if ($this->userRepository->hasByEmailExceptOwn($command->email, $user->getId())) {
+            throw new \DomainException('User with same email already exists.');
+        }
+
         $user->edit(
             $command->email
         );

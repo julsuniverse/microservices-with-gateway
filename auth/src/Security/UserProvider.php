@@ -50,11 +50,20 @@ class UserProvider implements UserProviderInterface
         throw new UsernameNotFoundException('');
     }
 
+    public function loadUserById(string $id): UserIdentity
+    {
+        if ($user = $this->users->findById($id)) {
+            return self::identityByUser($user);
+        }
+
+        throw new UsernameNotFoundException('');
+    }
+
     private static function identityByUser(AuthDTO $user): UserIdentity
     {
         return new UserIdentity(
             $user->id,
-            $user->email,
+            $user->id,//$user->email,
             $user->password_hash,
             $user->role
         );

@@ -50,7 +50,7 @@ class User
 
     public function __construct(Id $id, string $email, string $passwordHash, \DateTimeImmutable $date)
     {
-        $this->id = $id->getValue();
+        $this->id = $id;
         $this->email = $email;
         $this->passwordHash = $passwordHash;
         $this->date = $date;

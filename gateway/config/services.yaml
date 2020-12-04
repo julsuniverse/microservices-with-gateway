@@ -31,7 +31,12 @@ services:
 
     App\Repository\UserRepository:
         arguments:
-            $baseUrl: '%env(BASE_DATA_MICROSERVICE_URL)%'
+            $dataBaseUrl: '%env(BASE_DATA_MICROSERVICE_URL)%'
+            $authBaseUrl: '%env(BASE_AUTH_MICROSERVICE_URL)%'
+
+    App\Service\TokenDecoder:
+        arguments:
+            $filePath: '%env(OAUTH_PUBLIC_KEY_PATH)%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

@@ -45,7 +45,7 @@ class Handler
         $user = new User(
             Id::next(),
             $command->email,
-            $this->passwordsHasher->hash($command->email),
+            $this->passwordsHasher->hash($command->password),
             new \DateTimeImmutable()
         );
 

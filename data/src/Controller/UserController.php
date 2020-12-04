@@ -50,9 +50,9 @@ class UserController extends AbstractController
             return new JsonResponse($json, Response::HTTP_BAD_REQUEST, [], true);
         }
 
-        $handler->handle($command);
+        $user = $handler->handle($command);
 
-        return $this->json([], Response::HTTP_CREATED);
+        return $this->json(['id' => $user->getId()->getValue()], Response::HTTP_CREATED);
     }
 
     /**
@@ -65,12 +65,13 @@ class UserController extends AbstractController
         return $this->json([
             'id' => $user->getId()->getValue(),
             'email' => $user->getEmail(),
-            'role' => $user->getRole()->getName()
+            'role' => $user->getRole()->getName(),
+            'password_hash' => $user->getPasswordHash(),
         ], Response::HTTP_OK);
     }
 
     /**
-     * @Route("/user/{id}/edit", name="user.edit", methods={"PATCH"})
+     * @Route("/user/{id}/edit", name="user.edit", methods={"PUT"})
      * @param User $user
      * @param Request $request
      * @param Update\Handler $handler

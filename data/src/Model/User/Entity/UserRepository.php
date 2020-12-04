@@ -37,4 +37,16 @@ class UserRepository
             ->getQuery()
             ->getSingleScalarResult() > 0;
     }
+
+    public function hasByEmailExceptOwn(string $email, Id $id): bool
+    {
+        return $this->repository->createQueryBuilder('t')
+            ->select('COUNT(t.id)')
+            ->andWhere('t.email = :email')
+            ->andWhere('t.id != :id')
+            ->setParameter(':email', $email)
+            ->setParameter(':id', $id)
+            ->getQuery()
+            ->getSingleScalarResult() > 0;
+    }
 }

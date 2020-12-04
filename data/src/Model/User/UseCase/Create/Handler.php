@@ -42,7 +42,7 @@ class Handler
         $this->userRepository = $userRepository;
     }
 
-    public function handle(Command $command): void
+    public function handle(Command $command): User
     {
         if ($this->userRepository->hasByEmail($command->email)) {
             throw new \DomainException('User with such email already exists.');
@@ -57,5 +57,7 @@ class Handler
 
         $this->em->persist($user);
         $this->em->flush();
+
+        return $user;
     }
 }
