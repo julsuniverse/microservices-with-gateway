@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use OpenApi\Annotations as OA;
 use App\Annotations\AllowAccess;
 use App\Exceptions\ValidationException;
 use App\Repository\UserRepository;
@@ -38,6 +39,30 @@ class ProfileController extends AbstractController
 
     /**
      * @Route("/user", name="profile.user.show", methods={"GET"})
+     *
+     * @OA\Get (
+     *     path="/user",
+     *     tags={"Profile"},
+     *     description="Show user",
+     *     @OA\Response(
+     *         response="200",
+     *         description="Success response",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="id", type="string"),
+     *             @OA\Property(property="email", type="string"),
+     *             @OA\Property(property="role", type="string"),
+     *             @OA\Property(property="password_hash", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Domain Error",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorModel400")
+     *     ),
+     *     security={{"Bearer": {}}}
+     * )
+     *
      * @param Request $request
      * @param User $user
      * @return JsonResponse
@@ -55,6 +80,35 @@ class ProfileController extends AbstractController
 
     /**
      * @Route("/user/edit", name="profile.user.edit", methods={"PUT"})
+     *
+     * @OA\Put(
+     *     path="/user/edit",
+     *     tags={"Profile"},
+     *     description="Edit user",
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             type="object",
+     *             required={"email"},
+     *             @OA\Property(property="email", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Success response",
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Domain Error",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorModel400")
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation Errors",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorModelValidation")
+     *     ),
+     *     security={{"Bearer": {}}}
+     * )
+     *
      * @param Request $request
      * @param User $user
      * @return JsonResponse
@@ -72,6 +126,23 @@ class ProfileController extends AbstractController
 
     /**
      * @Route("/user", name="profile.user.delete", methods={"DELETE"})
+     *
+     * @OA\Delete (
+     *     path="/user",
+     *     tags={"Profile"},
+     *     description="Delete user",
+     *     @OA\Response(
+     *         response="204",
+     *         description="Success response",
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Domain Error",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorModel400")
+     *     ),
+     *     security={{"Bearer": {}}}
+     * )
+     *
      * @param Request $request
      * @param User $user
      * @return JsonResponse

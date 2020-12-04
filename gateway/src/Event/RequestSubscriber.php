@@ -60,6 +60,7 @@ class RequestSubscriber implements EventSubscriberInterface
         );
 
         $token = $request->headers->get('Authorization');
+
         if (!$token && (!$allowAccess || $allowAccess->isGuest())) {
             return;
         }

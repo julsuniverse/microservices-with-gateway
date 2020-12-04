@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use OpenApi\Annotations as OA;
 use App\Annotations\AllowAccess;
 use App\Exceptions\ValidationException;
 use App\Repository\UserRepository;
@@ -38,6 +39,39 @@ class UserController extends AbstractController
 
     /**
      * @Route("/user/create", name="user.create", methods={"POST"})
+     *
+     * @OA\Post(
+     *     path="/user/create",
+     *     tags={"User"},
+     *     description="Create user",
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             type="object",
+     *             required={"email"},
+     *             @OA\Property(property="email", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="201",
+     *         description="Success response",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="id", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Domain Error",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorModel400")
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation Errors",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorModelValidation")
+     *     ),
+     *     security={{"Bearer": {}}}
+     * )
+     *
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
@@ -54,6 +88,37 @@ class UserController extends AbstractController
 
     /**
      * @Route("/user/{id}", name="user.show", methods={"GET"})
+     *
+     * @OA\Get (
+     *     path="/user/{id}",
+     *     tags={"User"},
+     *     description="Show user",
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="id",
+     *         description="User ID",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Success response",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="id", type="string"),
+     *             @OA\Property(property="email", type="string"),
+     *             @OA\Property(property="role", type="string"),
+     *             @OA\Property(property="password_hash", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Domain Error",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorModel400")
+     *     ),
+     *     security={{"Bearer": {}}}
+     * )
+     *
      * @param Request $request
      * @param string $id
      * @return JsonResponse
@@ -71,6 +136,42 @@ class UserController extends AbstractController
 
     /**
      * @Route("/user/{id}/edit", name="user.edit", methods={"PUT"})
+     *
+     * @OA\Put(
+     *     path="/user/{id}/edit",
+     *     tags={"User"},
+     *     description="Edit user",
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="id",
+     *         description="User ID",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(
+     *             type="object",
+     *             required={"email"},
+     *             @OA\Property(property="email", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Success response",
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Domain Error",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorModel400")
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation Errors",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorModelValidation")
+     *     ),
+     *     security={{"Bearer": {}}}
+     * )
+     *
      * @param Request $request
      * @param string $id
      * @return JsonResponse
@@ -88,6 +189,30 @@ class UserController extends AbstractController
 
     /**
      * @Route("/user/{id}", name="user.delete", methods={"DELETE"})
+     *
+     * @OA\Delete (
+     *     path="/user/{id}",
+     *     tags={"User"},
+     *     description="Delete user",
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="id",
+     *         description="User ID",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response="204",
+     *         description="Success response",
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Domain Error",
+     *         @OA\JsonContent(ref="#/components/schemas/ErrorModel400")
+     *     ),
+     *     security={{"Bearer": {}}}
+     * )
+     *
      * @param Request $request
      * @param string $id
      * @return JsonResponse
